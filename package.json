@@ -1,6 +1,10 @@
 {
-  "name": "orion-toolkit",
+  "name": "@orion-solutions-group/orion-toolkit",
   "version": "0.0.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Orion-Solutions-Group/Toolkit-WebUI.git"
+  },
   "type": "module",
   "scripts": {
     "dev": "vite",
