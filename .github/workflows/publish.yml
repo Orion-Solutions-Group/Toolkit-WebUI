@@ -19,7 +19,7 @@ jobs:
           registry-url: 'https://npm.pkg.github.com/'
 
       - name: Set up GitHub Authentication
-        run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
+        run: echo "${{ secrets.NPM_REGISTRY_AUTH }}" > ~/.npmrc
 
       - name: Install dependencies
         run: npm install
