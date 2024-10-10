@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
+import ButtonTest from './components/ButtonTest.vue'
 </script>
 
 <template>
@@ -13,11 +13,13 @@ import TheWelcome from './components/TheWelcome.vue'
   </header>
 
   <main>
+    <ButtonTest label="Ceci est un test" type="button" />
     <TheWelcome />
   </main>
 </template>
 
 <style scoped>
+
 header {
   line-height: 1.5;
 }
