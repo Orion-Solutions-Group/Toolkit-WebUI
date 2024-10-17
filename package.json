@@ -1,11 +1,14 @@
 {
   "name": "@orion-solutions-group/orion-toolkit",
-  "version": "0.0.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/Orion-Solutions-Group/Toolkit-WebUI.git"
   },
+  "version": "0.0.1",
   "type": "module",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "dev": "vite",
     "build": "run-p type-check \"build-only {@}\" --",
@@ -17,6 +20,7 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "@heroicons/vue": "^2.1.5",
     "pinia": "^2.1.7",
     "vue": "^3.4.29"
   },
@@ -45,5 +49,8 @@
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/"
+  },
+  "peerDependencies": {
+    "vue": "^3.4.29"
   }
 }
