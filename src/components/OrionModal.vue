@@ -48,8 +48,8 @@ export default defineComponent({
       default: false,
     },
     icon: {
-      type: String,
-      default: 'TrashIcon',
+      type: Object,
+      default: null,
     },
     size: {
       type: String,
@@ -85,14 +85,20 @@ export default defineComponent({
     };
 
     const iconComponent = computed(() => {
-      switch (props.icon) {
-        case 'BeakerIcon':
+      if(props.icon){
+        return props.icon;
+      }else{
+        if(props.type === 'primary'){
           return BeakerIcon;
-        case 'HomeIcon':
-          return HomeIcon;
-        case 'TrashIcon':
-        default:
+        }else if(props.type === 'danger'){
           return TrashIcon;
+        }else if(props.type === 'secondary'){
+          return TrashIcon;
+        }else if(props.type === 'success'){
+          return HomeIcon;
+        }else{
+          return BeakerIcon;
+        }
       }
     });
 
