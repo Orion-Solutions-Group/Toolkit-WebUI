@@ -134,6 +134,4 @@ const inputClass = computed(() => {
   </div>
 </template>
 
-<style scoped>
-/* Aucune personnalisation CSS lourde n'est nécessaire avec Tailwind */
-</style>
+
