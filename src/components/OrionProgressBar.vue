@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue';
-import { useField, defineRule, ErrorMessage } from 'vee-validate';
-import * as yup from 'yup';
+import { defineRule, ErrorMessage } from 'vee-validate';
 
 // Définir une règle pour valider la progression entre 0 et 100
 defineRule('progress', (value: number) => {
@@ -41,10 +40,7 @@ const props = defineProps({
 });
 
 // Utilisation de Vee-Validate pour valider que le progress est entre 0 et 100
-const { value: validatedProgress } = useField(
-  'progress',
-  yup.number().min(0).max(100).required('Le progrès est requis')
-);
+
 
 // Animation fluide pour la barre de progression
 const animatedProgress = ref(props.progress);
@@ -95,4 +91,3 @@ const stepWidth = computed(() => {
     <ErrorMessage name="progress" />
   </div>
 </template>
-
