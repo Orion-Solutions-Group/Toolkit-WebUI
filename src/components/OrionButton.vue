@@ -1,4 +1,3 @@
-
 <script setup lang="ts">
 import { computed } from 'vue';
 import type { PropType } from 'vue';
@@ -25,6 +24,14 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  margin: {
+    type: String,
+    default: '', // Option pour les marges (ex: 'my-2')
+  },
+  padding: {
+    type: String,
+    default: 'px-4 py-2', // Option pour le padding par défaut
+  },
 });
 
 const isDisabled = computed(() => props.loading || props.disabled);
@@ -40,12 +47,15 @@ const handleClick = (event: Event) => {
   <button
     :disabled="isDisabled"
     @click="handleClick"
-    class="btn
-      px-4 py-2 text-white bg-blue-500 rounded-md
-      hover:bg-blue-600 
-      disabled:opacity-50 disabled:cursor-not-allowed
-      flex items-center justify-center transition ease-in-out duration-150"
-    :class="{ 'cursor-progress': loading }"
+    :class="[
+      'btn',
+      padding,
+      'text-white bg-blue-500 rounded-md hover:bg-blue-600',
+      'disabled:opacity-50 disabled:cursor-not-allowed',
+      'flex items-center justify-center transition ease-in-out duration-150',
+      margin,
+      { 'cursor-progress': loading },
+    ]"
   >
     <!-- Icône à gauche si iconPosition est 'left' -->
     <span v-if="icon && iconPosition === 'left'" class="btn__icon mr-2">
@@ -70,3 +80,7 @@ const handleClick = (event: Event) => {
     </span>
   </button>
 </template>
+
+<style scoped>
+/* Styles personnalisés si nécessaire */
+</style>
