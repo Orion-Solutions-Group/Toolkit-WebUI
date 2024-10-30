@@ -37,10 +37,15 @@ const props = defineProps({
     type: Number,
     default: 0, // Pas d'étapes par défaut
   },
+  margin: {
+    type: String,
+    default: '', // Option pour les marges (ex: 'my-4')
+  },
+  padding: {
+    type: String,
+    default: '', // Option pour le padding (ex: 'p-2')
+  },
 });
-
-// Utilisation de Vee-Validate pour valider que le progress est entre 0 et 100
-
 
 // Animation fluide pour la barre de progression
 const animatedProgress = ref(props.progress);
@@ -57,7 +62,7 @@ const stepWidth = computed(() => {
 </script>
 
 <template>
-  <div class="progress-container">
+  <div :class="['progress-container', margin, padding]">
     <!-- Affichage du pourcentage si le prop showPercentage est activé -->
     <div v-if="showPercentage" class="mb-2 text-right font-medium text-sm">
       {{ props.progress }}%
@@ -67,11 +72,11 @@ const stepWidth = computed(() => {
     <div :class="['relative', width, 'bg-gray-200', height, 'rounded']">
       <!-- Barre de progression animée -->
       <div
-        :class="['absolute left-0 top-0 rounded', height, color, 'transition-all ease-in-out duration-500']"
-        :style="{ width: `${animatedProgress.valueOf}%` }"
+        :class="['absolute left-0 top-0 rounded', height, color, 'transition-all ease-in-out duration-500 flex items-center']"
+        :style="{ width: `${animatedProgress.valueOf()}%` }"
       >
         <!-- Affichage du pourcentage à l'intérieur de la barre si configuré -->
-        <span v-if="!showPercentage" class="text-white text-sm font-semibold pl-2">
+        <span v-if="!showPercentage" class="text-white text-sm font-semibold pl-2 whitespace-nowrap">
           {{ props.progress }}%
         </span>
       </div>
@@ -91,3 +96,10 @@ const stepWidth = computed(() => {
     <ErrorMessage name="progress" />
   </div>
 </template>
+
+<style scoped>
+.progress-container {
+  /* Ajout de styles de base, si nécessaire */
+}
+
+</style>
