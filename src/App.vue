@@ -1,34 +1,43 @@
 <script setup lang="ts">
 import { ref } from 'vue';
+import InputTest from '@/components/InputTest.vue';
 
-import CustomInput from './components/InputTest.vue'; // Assurez-vous que le chemin est correct
+const inputWithIcons = ref('');
+const inputWithError = ref('');
+const inputLoading = ref('');
+const inputWithSuggestions = ref('');
+const inputEmail = ref('');
+const inputPassword = ref('');
+const inputPlaceholder = ref('');
+const inputDisabled = ref('');
 
-const inputValue = ref(''); // Lier la valeur de l'input
 const inputError = ref('');
 const loadingState = ref(false);
 const autoSuggestions = ref(['Suggestion 1', 'Suggestion 2', 'Autre Suggestion']);
 
-// Fonction pour simuler une validation simple
 const validateInput = () => {
-  if (inputValue.value.length < 3) {
+  if (inputWithError.value.length < 3) {
     inputError.value = 'La saisie doit contenir au moins 3 caractères.';
   } else {
     inputError.value = '';
   }
 };
 
-// Fonction pour simuler un chargement dynamique
+const toggleError = () => {
+  inputError.value = inputError.value ? '' : 'Une erreur est survenue.';
+};
+
 const toggleLoading = () => {
   loadingState.value = !loadingState.value;
 };
 </script>
+
 <template>
   <h1 class="text-3xl font-bold underline mb-4">Test du composant CustomInput</h1>
 
-  <!-- Icônes gauche et droite -->
   <div class="my-4">
     <h2 class="text-xl font-bold">Test de l'icône gauche et droite</h2>
-    <CustomInput
+    <InputTest
       v-model="inputWithIcons"
       label="Email avec icônes"
       type="email"
@@ -38,10 +47,9 @@ const toggleLoading = () => {
     />
   </div>
 
-  <!-- Message d'erreur -->
   <div class="my-4">
     <h2 class="text-xl font-bold">Test du message d'erreur</h2>
-    <CustomInput
+    <InputTest
       v-model="inputWithError"
       label="Nom d'utilisateur avec erreur"
       type="text"
@@ -51,10 +59,9 @@ const toggleLoading = () => {
     <button @click="toggleError" class="btn-primary mt-2">Simuler une erreur</button>
   </div>
 
-  <!-- État de chargement -->
   <div class="my-4">
     <h2 class="text-xl font-bold">Test de l'état de chargement</h2>
-    <CustomInput
+    <InputTest
       v-model="inputLoading"
       label="Chargement de l'input"
       type="text"
@@ -66,10 +73,9 @@ const toggleLoading = () => {
     </button>
   </div>
 
-  <!-- Auto-complétion -->
   <div class="my-4">
     <h2 class="text-xl font-bold">Test de l'auto-complétion</h2>
-    <CustomInput
+    <InputTest
       v-model="inputWithSuggestions"
       label="Nom d'utilisateur avec auto-complétion"
       type="text"
@@ -78,16 +84,15 @@ const toggleLoading = () => {
     />
   </div>
 
-  <!-- Types d'input -->
   <div class="my-4">
     <h2 class="text-xl font-bold">Test du type d'input</h2>
-    <CustomInput
+    <InputTest
       v-model="inputEmail"
       label="Email"
       type="email"
       placeholder="Entrez votre email"
     />
-    <CustomInput
+    <InputTest
       v-model="inputPassword"
       label="Mot de passe"
       type="password"
@@ -95,10 +100,9 @@ const toggleLoading = () => {
     />
   </div>
 
-  <!-- Placeholder -->
   <div class="my-4">
     <h2 class="text-xl font-bold">Test du placeholder</h2>
-    <CustomInput
+    <InputTest
       v-model="inputPlaceholder"
       label="Champ avec placeholder"
       type="text"
@@ -106,10 +110,9 @@ const toggleLoading = () => {
     />
   </div>
 
-  <!-- État désactivé -->
   <div class="my-4">
     <h2 class="text-xl font-bold">Test de l'état désactivé</h2>
-    <CustomInput
+    <InputTest
       v-model="inputDisabled"
       label="Champ désactivé"
       type="text"
@@ -118,9 +121,3 @@ const toggleLoading = () => {
     />
   </div>
 </template>
-
-
-
-
-
-

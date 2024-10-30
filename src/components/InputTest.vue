@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import { ref, computed, defineProps, watch } from 'vue';
+import { ref, computed, defineProps, defineEmits, watch } from 'vue';
 import { useField, defineRule, ErrorMessage } from 'vee-validate';
 import * as yup from 'yup';
+
+const emit = defineEmits(['update:modelValue']);
 
 const props = defineProps({
   modelValue: {
@@ -44,18 +46,24 @@ const props = defineProps({
     type: Array as () => string[],
     default: () => [],
   },
+  margin: {
+    type: String,
+    default: '', // Classe de marge personnalisable (ex: 'my-2')
+  },
+  padding: {
+    type: String,
+    default: 'px-4 py-2', // Classe de padding par défaut
+  },
 });
 
-const inputRef = ref('');
+const inputRef = ref(props.modelValue);
 const isFocused = ref(false);
 const displayResults = ref(false);
 
-// Méthode pour afficher/masquer les résultats d'auto-complétion
 const toggleResults = (state: boolean) => {
   displayResults.value = state;
 };
 
-// Gestion du focus pour l'affichage des résultats
 const handleFocus = () => {
   isFocused.value = true;
   toggleResults(true);
@@ -63,20 +71,23 @@ const handleFocus = () => {
 
 const handleBlur = () => {
   isFocused.value = false;
-  setTimeout(() => toggleResults(false), 200); // Timer pour permettre de cliquer sur un résultat
+  setTimeout(() => toggleResults(false), 200);
 };
 
-// Méthode pour mettre à jour la valeur de l'input
 const emitValue = (value: string) => {
   inputRef.value = value;
   toggleResults(false);
   emit('update:modelValue', value);
 };
 
-// Computed property pour gérer la classe en fonction de l'état de l'input
+watch(inputRef, (newVal) => {
+  emit('update:modelValue', newVal);
+});
+
 const inputClass = computed(() => {
   return [
-    'w-full py-2 px-4 rounded-md border',
+    'w-full rounded-md border',
+    props.padding,
     props.disabled ? 'bg-gray-200 cursor-not-allowed' : 'bg-white',
     isFocused.value ? 'border-blue-500' : 'border-gray-300',
     props.error ? 'border-red-500' : '',
@@ -85,15 +96,12 @@ const inputClass = computed(() => {
 </script>
 
 <template>
-  <div class="custom-input w-full">
-    <!-- Affichage du label -->
+  <div :class="['custom-input w-full', margin]">
     <label v-if="label" class="block mb-1 font-medium text-gray-700">{{ label }}</label>
 
     <div class="relative w-full">
-      <!-- Affichage d'une icône à gauche -->
       <i v-if="leftIcon" :class="[leftIcon, 'absolute left-3 top-1/2 transform -translate-y-1/2']"></i>
 
-      <!-- Champ de saisie -->
       <input
         :type="type"
         v-model="inputRef"
@@ -105,10 +113,8 @@ const inputClass = computed(() => {
         class="w-full"
       />
 
-      <!-- Affichage d'une icône à droite -->
       <i v-if="rightIcon" :class="[rightIcon, 'absolute right-3 top-1/2 transform -translate-y-1/2']"></i>
 
-      <!-- Affichage du loader si en chargement -->
       <div v-if="isLoading" class="absolute right-3 top-1/2 transform -translate-y-1/2">
         <svg class="animate-spin h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
           <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -116,7 +122,6 @@ const inputClass = computed(() => {
         </svg>
       </div>
 
-      <!-- Affichage des résultats d'auto-complétion -->
       <ul v-if="displayResults && autoCompleteResults.length" class="absolute w-full bg-white border border-gray-300 rounded-md mt-1 max-h-40 overflow-y-auto z-10">
         <li
           v-for="(result, index) in autoCompleteResults"
@@ -129,9 +134,6 @@ const inputClass = computed(() => {
       </ul>
     </div>
 
-    <!-- Message d'erreur -->
     <p v-if="error" class="mt-1 text-red-500 text-sm">{{ error }}</p>
   </div>
 </template>
-
-
