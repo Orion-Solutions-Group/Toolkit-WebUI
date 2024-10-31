@@ -62,9 +62,9 @@ const badgeClass = computed(() => {
     props.clickable ? 'cursor-pointer hover:bg-opacity-75 transition' : '',
     props.variant === 'outline'
       ? `border ${props.color.replace('bg', 'border')} ${props.color.replace(
-        'bg',
-        'text'
-      )} bg-transparent`
+          'bg',
+          'text'
+        )} bg-transparent`
       : `${props.color} text-white`,
   ];
 
