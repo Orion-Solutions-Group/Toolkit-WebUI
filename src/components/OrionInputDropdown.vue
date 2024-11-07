@@ -28,12 +28,6 @@
 import { defineComponent, ref, computed } from 'vue';
 
 export default defineComponent({
-  props: {
-    items: {
-      type: Array,
-      required: true,
-    },
-  },
   setup(props, { emit }) {
     const query = ref('');
     const showResults = ref(false);

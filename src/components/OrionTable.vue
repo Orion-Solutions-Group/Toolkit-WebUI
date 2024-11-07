@@ -2,53 +2,88 @@
   <div :class="['p-4', tableClass]">
     <table class="min-w-full bg-white">
       <thead>
-      <tr>
-        <th v-for="column in columns" :key="column.key" class="py-2 px-4 border-b text-left">
-          <button @click="sortTable(column.key)" class="flex items-center space-x-1">
-            <span>{{ column.label }}</span>
-            <span v-if="sortKey === column.key">
+        <tr>
+          <th
+            v-for="column in columns"
+            :key="column.key"
+            class="py-2 px-4 border-b text-left"
+          >
+            <button
+              @click="sortTable(column.key)"
+              class="flex items-center space-x-1"
+            >
+              <span>{{ column.label }}</span>
+              <span v-if="sortKey === column.key">
                 <svg
-                    v-if="sortDirection === 'asc'"
-                    class="w-4 h-4 transform rotate-180"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
+                  v-if="sortDirection === 'asc'"
+                  class="w-4 h-4 transform rotate-180"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
                 >
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M19 9l-7 7-7-7"
+                  ></path>
                 </svg>
                 <svg
-                    v-else
-                    class="w-4 h-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    xmlns="http://www.w3.org/2000/svg"
+                  v-else
+                  class="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
                 >
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M19 9l-7 7-7-7"
+                  ></path>
                 </svg>
               </span>
-          </button>
-        </th>
-        <!-- Add a column header for actions if there are actions -->
-        <th v-if="actions && actions.length" class="py-2 px-4 border-b text-left">Actions</th>
-      </tr>
+            </button>
+          </th>
+          <!-- Add a column header for actions if there are actions -->
+          <th
+            v-if="actions && actions.length"
+            class="py-2 px-4 border-b text-left"
+          >
+            Actions
+          </th>
+        </tr>
       </thead>
       <tbody>
-      <tr v-for="(row, index) in sortedRows" :key="index" :class="rowClass(index)">
-        <td v-for="column in columns" :key="column.key" class="py-2 px-4 border-b">{{ row[column.key] }}</td>
-        <!-- Render action buttons for each row -->
-        <td v-if="actions && actions.length" class="py-2 px-4 border-b space-x-2">
-          <button
+        <tr
+          v-for="(row, index) in sortedRows"
+          :key="index"
+          :class="rowClass(index)"
+        >
+          <td
+            v-for="column in columns"
+            :key="column.key"
+            class="py-2 px-4 border-b"
+          >
+            {{ row[column.key] }}
+          </td>
+          <!-- Render action buttons for each row -->
+          <td
+            v-if="actions && actions.length"
+            class="py-2 px-4 border-b space-x-2"
+          >
+            <button
               v-for="(action, actionIndex) in actions"
               :key="actionIndex"
               @click="action.handler(row)"
               class="px-2 py-1 text-white bg-blue-500 hover:bg-blue-700 rounded"
-          >
-            {{ action.label }}
-          </button>
-        </td>
-      </tr>
+            >
+              {{ action.label }}
+            </button>
+          </td>
+        </tr>
       </tbody>
     </table>
   </div>
@@ -74,7 +109,9 @@ export default defineComponent({
       default: 'basic', // Default value
     },
     actions: {
-      type: Array as PropType<Array<{ label: string; handler: (row: Record<string, any>) => void }>>,
+      type: Array as PropType<
+        Array<{ label: string; handler: (row: Record<string, any>) => void }>
+      >,
       default: () => [],
     },
   },
