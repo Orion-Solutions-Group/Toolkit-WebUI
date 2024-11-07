@@ -1,22 +1,22 @@
 <template>
   <div class="relative w-full max-w-sm mx-auto">
     <input
-      type="text"
-      v-model="query"
-      @input="search"
-      placeholder="Rechercher..."
-      class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+        type="text"
+        v-model="query"
+        @input="search"
+        placeholder="Rechercher..."
+        class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
     />
 
     <ul
-      v-if="filteredResults.length > 0 && showResults"
-      class="absolute left-0 w-full mt-2 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto"
+        v-if="filteredResults.length > 0 && showResults"
+        class="absolute left-0 w-full mt-2 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto"
     >
       <li
-        v-for="(result, index) in filteredResults"
-        :key="index"
-        @click="selectResult(result)"
-        class="px-4 py-2 cursor-pointer hover:bg-indigo-100"
+          v-for="(result, index) in filteredResults"
+          :key="index"
+          @click="selectResult(result)"
+          class="px-4 py-2 cursor-pointer hover:bg-indigo-100"
       >
         {{ result }}
       </li>
@@ -25,35 +25,41 @@
 </template>
 
 <script>
-export default {
-  props: {
-    items: {
-      type: Array,
-      required: true,
-    },
-  },
-  data() {
+import { defineComponent, ref, computed } from 'vue';
+
+export default defineComponent({
+  setup(props, { emit }) {
+    const query = ref('');
+    const showResults = ref(false);
+
+    const filteredResults = computed(() => {
+      console.log('items', props.items);
+      console.log('isArray', Array.isArray(props.items));
+      if (Array.isArray(props.items)) {
+        return props.items.filter((item) =>
+            item.toLowerCase().includes(query.value.toLowerCase())
+        );
+      }
+      return [];  // Retourne un tableau vide si 'items' n'est pas un tableau
+    });
+
+    const search = () => {
+      showResults.value = query.value.length > 0;
+    };
+
+    const selectResult = (result) => {
+      query.value = result;
+      showResults.value = false;
+      emit('select', result);  // Émettre l'événement 'select' avec le résultat sélectionné
+    };
+
     return {
-      query: '',
-      showResults: false,
+      query,
+      showResults,
+      filteredResults,
+      search,
+      selectResult,
     };
   },
-  computed: {
-    filteredResults() {
-      return this.items.filter((item) =>
-        item.toLowerCase().includes(this.query.toLowerCase())
-      );
-    },
-  },
-  methods: {
-    search() {
-      this.showResults = this.query.length > 0;
-    },
-    selectResult(result) {
-      this.query = result;
-      this.showResults = false;
-      this.$emit('select', result);
-    },
-  },
-};
+});
 </script>
