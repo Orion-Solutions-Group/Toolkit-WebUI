@@ -2,10 +2,12 @@
 
 import { ref } from 'vue';
 import OrionModal from './components/OrionModal.vue';
-import DataTable from "@/components/OrionTable.vue";
-import OrionTable from "@/components/OrionTable.vue";
+import OrionInputDropdown from "@/components/OrionInputDropdown.vue";
+import DataTable from '@/components/OrionTable.vue';
+import OrionTable from '@/components/OrionTable.vue';
 
 const showModal = ref(false);
+const items = ['John Doe', 'Jane Smith', 'Alice Brown'];
 
 const handleAccept = () => {
   showModal.value = false;
@@ -49,5 +51,6 @@ const handleAccept = () => {
   type="hover"
   />
 
+  <OrionInputDropdown :items="items" @select="console.log" />
 </template>
 
