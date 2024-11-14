@@ -23,6 +23,11 @@
     "test": "echo \"No tests available\""
   },
   "dependencies": {
+    "@fullcalendar/core": "^6.1.15",
+    "@fullcalendar/daygrid": "^6.1.15",
+    "@fullcalendar/interaction": "^6.1.15",
+    "@fullcalendar/timegrid": "^6.1.15",
+    "@fullcalendar/vue3": "^6.1.15",
     "@heroicons/vue": "^2.1.5",
     "pinia": "^2.1.7",
     "vue": "^3.4.29",
