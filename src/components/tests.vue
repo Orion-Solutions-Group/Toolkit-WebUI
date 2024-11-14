@@ -1,15 +1,25 @@
 <template>
-  <OrionForm
-    image-url="https://wallpapers.com/images/hd/yellow-house-and-greenery-best-hd-h5hf3cmcwkls52wo.jpg"
-    position="right"
-  >
-    <h1 class="text-3xl font-bold mb-4">Contact Us</h1>
-    <p class="mb-4">
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam
-      consectetur, nunc vel lacinia.
-    </p>
-  </OrionForm>
+  <div>
+    <Breadcrumb :items="breadcrumbItems" />
+  </div>
 </template>
-<script setup lang="ts">
-import OrionForm from '@/components/OrionForm.vue';
+
+<script>
+import Breadcrumb from '@/components/OrionBreadcrumb.vue';
+import { HomeIcon, ServerIcon } from '@heroicons/vue/24/outline';
+
+export default {
+  components: {
+    Breadcrumb,
+  },
+  data() {
+    return {
+      breadcrumbItems: [
+        { label: 'Documentation', href: '#', icon: HomeIcon },
+        { label: 'Database', href: '#', icon: ServerIcon },
+        { label: 'Replication', href: '', icon: ServerIcon },
+      ],
+    };
+  },
+};
 </script>
