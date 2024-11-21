@@ -18,7 +18,7 @@ const eventAttendees = ref<string[]>([]);
 const errorMessage = ref('');
 const selectedEvent = ref<any>(null);
 const isEditMode = ref(false);
-const newAttendee = ref(''); // Variable pour le nouvel ajout de participant
+const newAttendee = ref('');
 
 const initialEvents = [
     {
@@ -63,6 +63,9 @@ const calendarOptions = {
         const clickedMinute = info.date.getMinutes();
         eventStart.value = `${clickedHour.toString().padStart(2, '0')}:${clickedMinute.toString().padStart(2, '0')}`;
         eventEnd.value = `${(clickedHour + 1).toString().padStart(2, '0')}:${clickedMinute.toString().padStart(2, '0')}`;
+        eventTitle.value = ''; 
+        eventSummary.value = ''; 
+        eventAttendees.value = []; 
         showCreatePopup.value = true;
         isEditMode.value = false;
         errorMessage.value = '';
@@ -87,11 +90,12 @@ const calendarOptions = {
             eventEnd.value = `${hours}:${minutes}`;
         }
 
-        eventSummary.value = info.event.extendedProps.summary;
-        eventAttendees.value = info.event.extendedProps.attendees;
+        eventSummary.value = info.event.extendedProps.summary || '';
+        eventAttendees.value = info.event.extendedProps.attendees || [];
 
         showCreatePopup.value = true;
         isEditMode.value = true;
+        errorMessage.value = '';
     }
 };
 
@@ -103,7 +107,6 @@ onMounted(() => {
 });
 
 const addEvent = () => {
-    console.log("Tentative d'ajout de l'événement...");
     const startDate = new Date(eventDate.value + 'T' + eventStart.value);
     const endDate = new Date(eventDate.value + 'T' + eventEnd.value);
     if (endDate <= startDate) {
@@ -122,7 +125,6 @@ const addEvent = () => {
             }
         };
         if (calendarInstance.value) {
-            console.log("Ajout d'événement");
             calendarInstance.value.addEvent(newEvent);
             calendarInstance.value.refetchEvents();
         } else {
@@ -130,12 +132,11 @@ const addEvent = () => {
         }
         showCreatePopup.value = false;
     } else {
-        console.error("Titre, heure de début ou heure de fin manquants !");
+        errorMessage.value = "Veuillez remplir tous les champs obligatoires.";
     }
 };
 
 const updateEvent = () => {
-    console.log("Tentative de mise à jour de l'événement...");
     if (selectedEvent.value) {
         const startDate = new Date(eventDate.value + 'T' + eventStart.value);
         const endDate = new Date(eventDate.value + 'T' + eventEnd.value);
@@ -176,7 +177,7 @@ const closeEventDetailsPopup = () => {
 <template>
     <div ref="calendarRef" class="w-full h-screen"></div>
 
-    <!-- Fenêtre popup pour créer ou modifier une réunion -->
+    <!-- Création ou modification de réunions -->
     <div v-if="showCreatePopup"
         class="fixed top-10 left-1/2 transform -translate-x-1/2 bg-white p-6 rounded-lg shadow-lg z-10 w-96">
         <h2 class="text-xl font-semibold mb-4">{{ isEditMode ? 'Modifier une réunion' : 'Créer une réunion' }}</h2>
