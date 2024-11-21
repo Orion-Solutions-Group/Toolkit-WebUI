@@ -15,6 +15,7 @@ const eventEnd = ref('');
 const eventDate = ref('');
 const eventSummary = ref('');
 const eventAttendees = ref<string[]>([]);
+const eventColor = ref('#3788d8');
 const errorMessage = ref('');
 const selectedEvent = ref<any>(null);
 const isEditMode = ref(false);
@@ -23,8 +24,9 @@ const newAttendee = ref('');
 const initialEvents = [
     {
         title: 'Réunion 1',
-        start: '2024-11-15T10:00:00',
-        end: '2024-11-15T11:00:00',
+        start: '2024-11-15T08:00:00Z',
+        end: '2024-11-15T09:00:00Z',
+        color: '#ff5722',
         extendedProps: {
             attendees: ['alice@example.com', 'bob@example.com'],
             summary: 'Réunion de coordination'
@@ -32,8 +34,9 @@ const initialEvents = [
     },
     {
         title: 'Rendez-vous 2',
-        start: '2024-11-16T14:00:00',
-        end: '2024-11-16T15:00:00',
+        start: '2024-11-16T14:00:00Z',
+        end: '2024-11-16T15:00:00Z',
+        color: '#4caf50',
         extendedProps: {
             attendees: ['carol@example.com', 'dave@example.com'],
             summary: 'Discussion projet X'
@@ -45,10 +48,7 @@ const calendarOptions = {
     plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
     locale: 'fr',
     initialView: 'dayGridMonth',
-    validRange: {
-        start: '2024-11-01',
-        end: '2024-11-30'
-    },
+    initialDate: new Date().toISOString().split('T')[0], // Affichage dynamique
     events: initialEvents,
     headerToolbar: {
         left: 'prev,next today',
@@ -59,13 +59,18 @@ const calendarOptions = {
     eventDurationEditable: true,
     dateClick(info: any) {
         eventDate.value = info.dateStr;
-        const clickedHour = info.date.getHours();
-        const clickedMinute = info.date.getMinutes();
-        eventStart.value = `${clickedHour.toString().padStart(2, '0')}:${clickedMinute.toString().padStart(2, '0')}`;
-        eventEnd.value = `${(clickedHour + 1).toString().padStart(2, '0')}:${clickedMinute.toString().padStart(2, '0')}`;
-        eventTitle.value = ''; 
-        eventSummary.value = ''; 
-        eventAttendees.value = []; 
+
+        const clickedHour = info.date.getUTCHours();
+        const defaultHour = clickedHour === 23 ? 8 : clickedHour;
+        const defaultMinute = 0;
+
+        eventStart.value = `${defaultHour.toString().padStart(2, '0')}:${defaultMinute.toString().padStart(2, '0')}`;
+        eventEnd.value = `${(defaultHour + 1).toString().padStart(2, '0')}:${defaultMinute.toString().padStart(2, '0')}`;
+
+        eventTitle.value = '';
+        eventSummary.value = '';
+        eventAttendees.value = [];
+        eventColor.value = '#3788d8';
         showCreatePopup.value = true;
         isEditMode.value = false;
         errorMessage.value = '';
@@ -79,19 +84,22 @@ const calendarOptions = {
         const endDate = info.event.end;
 
         if (startDate) {
-            const hours = startDate.getHours().toString().padStart(2, '0');
-            const minutes = startDate.getMinutes().toString().padStart(2, '0');
+            const hours = startDate.getUTCHours().toString().padStart(2, '0');
+            const minutes = startDate.getUTCMinutes().toString().padStart(2, '0');
             eventStart.value = `${hours}:${minutes}`;
         }
 
         if (endDate) {
-            const hours = endDate.getHours().toString().padStart(2, '0');
-            const minutes = endDate.getMinutes().toString().padStart(2, '0');
+            const hours = endDate.getUTCHours().toString().padStart(2, '0');
+            const minutes = endDate.getUTCMinutes().toString().padStart(2, '0');
             eventEnd.value = `${hours}:${minutes}`;
         }
 
         eventSummary.value = info.event.extendedProps.summary || '';
         eventAttendees.value = info.event.extendedProps.attendees || [];
+        eventColor.value = info.event.backgroundColor || '#3788d8';
+
+        eventDate.value = startDate?.toISOString().split('T')[0] || '';
 
         showCreatePopup.value = true;
         isEditMode.value = true;
@@ -107,8 +115,8 @@ onMounted(() => {
 });
 
 const addEvent = () => {
-    const startDate = new Date(eventDate.value + 'T' + eventStart.value);
-    const endDate = new Date(eventDate.value + 'T' + eventEnd.value);
+    const startDate = new Date(`${eventDate.value}T${eventStart.value}Z`);
+    const endDate = new Date(`${eventDate.value}T${eventEnd.value}Z`);
     if (endDate <= startDate) {
         errorMessage.value = "L'heure de fin doit être après l'heure de début.";
         return;
@@ -117,8 +125,9 @@ const addEvent = () => {
     if (eventTitle.value && eventStart.value && eventEnd.value) {
         const newEvent = {
             title: eventTitle.value,
-            start: startDate,
-            end: endDate,
+            start: startDate.toISOString(),
+            end: endDate.toISOString(),
+            color: eventColor.value,
             extendedProps: {
                 summary: eventSummary.value,
                 attendees: eventAttendees.value
@@ -126,7 +135,6 @@ const addEvent = () => {
         };
         if (calendarInstance.value) {
             calendarInstance.value.addEvent(newEvent);
-            calendarInstance.value.refetchEvents();
         } else {
             console.error("L'instance de calendrier n'est pas initialisée !");
         }
@@ -138,8 +146,8 @@ const addEvent = () => {
 
 const updateEvent = () => {
     if (selectedEvent.value) {
-        const startDate = new Date(eventDate.value + 'T' + eventStart.value);
-        const endDate = new Date(eventDate.value + 'T' + eventEnd.value);
+        const startDate = new Date(`${eventDate.value}T${eventStart.value}Z`);
+        const endDate = new Date(`${eventDate.value}T${eventEnd.value}Z`);
         if (endDate <= startDate) {
             errorMessage.value = "L'heure de fin doit être après l'heure de début.";
             return;
@@ -148,6 +156,7 @@ const updateEvent = () => {
         selectedEvent.value.setProp('title', eventTitle.value);
         selectedEvent.value.setStart(startDate);
         selectedEvent.value.setEnd(endDate);
+        selectedEvent.value.setProp('backgroundColor', eventColor.value);
         selectedEvent.value.setExtendedProp('summary', eventSummary.value);
         selectedEvent.value.setExtendedProp('attendees', eventAttendees.value);
 
@@ -155,6 +164,16 @@ const updateEvent = () => {
         showCreatePopup.value = false;
     } else {
         console.error("Aucun événement sélectionné pour la mise à jour !");
+    }
+};
+
+const deleteEvent = () => {
+    if (selectedEvent.value) {
+        selectedEvent.value.remove();
+        selectedEvent.value = null;
+        showCreatePopup.value = false;
+    } else {
+        console.error("Aucun événement sélectionné pour la suppression !");
     }
 };
 
@@ -177,39 +196,63 @@ const closeEventDetailsPopup = () => {
 <template>
     <div ref="calendarRef" class="w-full h-screen"></div>
 
-    <!-- Création ou modification de réunions -->
+    <!-- Popup pour création et modification -->
     <div v-if="showCreatePopup"
         class="fixed top-10 left-1/2 transform -translate-x-1/2 bg-white p-6 rounded-lg shadow-lg z-10 w-96">
         <h2 class="text-xl font-semibold mb-4">{{ isEditMode ? 'Modifier une réunion' : 'Créer une réunion' }}</h2>
 
         <form @submit.prevent="isEditMode ? updateEvent() : addEvent()">
-            <label for="eventTitle" class="block text-sm font-medium text-gray-700">Titre de la réunion:</label>
-            <input v-model="eventTitle" id="eventTitle" required class="mt-1 p-2 border rounded w-full" />
+            <label for="eventTitle" class="block text-sm font-medium text-gray-700">Titre de la réunion</label>
+            <input v-model="eventTitle" id="eventTitle" type="text" class="mt-2 p-2 border rounded w-full"
+                placeholder="Titre" required />
 
-            <label for="eventStart" class="block text-sm font-medium text-gray-700 mt-4">Début:</label>
-            <input v-model="eventStart" id="eventStart" type="time" required class="mt-1 p-2 border rounded w-full" />
+            <div class="flex justify-between mt-4">
+                <div class="w-1/2 pr-2">
+                    <label for="eventStart" class="block text-sm font-medium text-gray-700">Heure de début</label>
+                    <input v-model="eventStart" id="eventStart" type="time" class="mt-2 p-2 border rounded w-full" />
+                </div>
+                <div class="w-1/2 pl-2">
+                    <label for="eventEnd" class="block text-sm font-medium text-gray-700">Heure de fin</label>
+                    <input v-model="eventEnd" id="eventEnd" type="time" class="mt-2 p-2 border rounded w-full" />
+                </div>
+            </div>
 
-            <label for="eventEnd" class="block text-sm font-medium text-gray-700 mt-4">Fin:</label>
-            <input v-model="eventEnd" id="eventEnd" type="time" required class="mt-1 p-2 border rounded w-full" />
+            <label for="eventDate" class="block text-sm font-medium text-gray-700 mt-4">Date de la réunion</label>
+            <input v-model="eventDate" id="eventDate" type="date" class="mt-2 p-2 border rounded w-full" />
 
-            <label for="eventSummary" class="block text-sm font-medium text-gray-700 mt-4">Résumé:</label>
-            <textarea v-model="eventSummary" id="eventSummary" class="mt-1 p-2 border rounded w-full"></textarea>
+            <label for="eventColor" class="block text-sm font-medium text-gray-700 mt-4">Couleur</label>
+            <input v-model="eventColor" id="eventColor" type="color" class="mt-2 p-2 border rounded w-full" />
 
-            <label for="eventAttendees" class="block text-sm font-medium text-gray-700 mt-4">Participants:</label>
-            <ul>
-                <li v-for="(attendee, index) in eventAttendees" :key="index">
-                    {{ attendee }}
-                    <button @click="removeAttendee(index)" class="ml-2 text-red-500">Supprimer</button>
+            <label for="eventSummary" class="block text-sm font-medium text-gray-700 mt-4">Résumé</label>
+            <textarea v-model="eventSummary" id="eventSummary" class="mt-2 p-2 border rounded w-full"
+                placeholder="Résumé"></textarea>
+
+            <label for="eventAttendees" class="block text-sm font-medium text-gray-700 mt-4">Participants</label>
+            <div class="flex items-center space-x-2 mt-2">
+                <input v-model="newAttendee" id="eventAttendees" type="email" class="p-2 border rounded flex-grow"
+                    placeholder="Ajouter un participant" />
+                <button @click.prevent="addAttendee"
+                    class="px-4 py-2 bg-green-500 text-white rounded shadow">Ajouter</button>
+            </div>
+
+            <ul class="mt-4">
+                <li v-for="(attendee, index) in eventAttendees" :key="index"
+                    class="flex justify-between items-center mb-2">
+                    <span>{{ attendee }}</span>
+                    <button @click="removeAttendee(index)"
+                        class="px-3 py-1 bg-red-500 text-white text-xs rounded shadow ml-2">Supprimer</button>
                 </li>
             </ul>
-            <input v-model="newAttendee" id="eventAttendees" type="email" placeholder="Ajouter un participant" class="mt-2 p-2 border rounded w-full" />
-            <button type="button" @click="addAttendee" class="mt-2 px-4 py-2 bg-green-500 text-white rounded">Ajouter</button>
 
-            <div v-if="errorMessage" class="text-red-500 mt-2">{{ errorMessage }}</div>
+            <p v-if="errorMessage" class="text-red-500 text-sm mt-4">{{ errorMessage }}</p>
 
-            <button type="submit" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">{{ isEditMode ? 'Sauvegarder' : 'Enregistrer' }}</button>
+            <div class="mt-6 flex justify-end space-x-2">
+                <button @click.prevent="closeEventDetailsPopup"
+                    class="px-4 py-2 bg-gray-300 rounded shadow">Annuler</button>
+                <button type="submit"
+                    class="px-4 py-2 bg-blue-500 text-white rounded shadow">{{ isEditMode ? 'Modifier' : 'Créer' }}</button>
+            </div>
         </form>
-
-        <button @click="closeEventDetailsPopup" class="mt-2 px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600">Fermer</button>
     </div>
 </template>
+
