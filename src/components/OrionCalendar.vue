@@ -1,4 +1,5 @@
 <script setup lang="ts">
+
 import { ref, onMounted } from 'vue';
 import { Calendar } from '@fullcalendar/core';
 import timeGridPlugin from '@fullcalendar/timegrid';
@@ -48,7 +49,7 @@ const calendarOptions = {
     plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
     locale: 'fr',
     initialView: 'dayGridMonth',
-    initialDate: new Date().toISOString().split('T')[0], // Affichage dynamique
+    initialDate: new Date().toISOString().split('T')[0],
     events: initialEvents,
     headerToolbar: {
         left: 'prev,next today',
@@ -133,11 +134,7 @@ const addEvent = () => {
                 attendees: eventAttendees.value
             }
         };
-        if (calendarInstance.value) {
-            calendarInstance.value.addEvent(newEvent);
-        } else {
-            console.error("L'instance de calendrier n'est pas initialisée !");
-        }
+        calendarInstance.value?.addEvent(newEvent);
         showCreatePopup.value = false;
     } else {
         errorMessage.value = "Veuillez remplir tous les champs obligatoires.";
@@ -221,7 +218,12 @@ const closeEventDetailsPopup = () => {
             <input v-model="eventDate" id="eventDate" type="date" class="mt-2 p-2 border rounded w-full" />
 
             <label for="eventColor" class="block text-sm font-medium text-gray-700 mt-4">Couleur</label>
-            <input v-model="eventColor" id="eventColor" type="color" class="mt-2 p-2 border rounded w-full" />
+            <div class="flex items-center mt-2">
+                <input v-model="eventColor" id="eventColor" type="color" class="p-2 border rounded w-full" />
+                <div class="ml-4 w-8 h-8 rounded border shadow" :style="{ backgroundColor: eventColor }"
+                    title="Aperçu de la couleur sélectionnée"></div>
+            </div>
+
 
             <label for="eventSummary" class="block text-sm font-medium text-gray-700 mt-4">Résumé</label>
             <textarea v-model="eventSummary" id="eventSummary" class="mt-2 p-2 border rounded w-full"
@@ -229,7 +231,7 @@ const closeEventDetailsPopup = () => {
 
             <label for="eventAttendees" class="block text-sm font-medium text-gray-700 mt-4">Participants</label>
             <div class="flex items-center space-x-2 mt-2">
-                <input v-model="newAttendee" id="eventAttendees" type="email" class="p-2 border rounded flex-grow"
+                <input v-model="newAttendee" id="eventAttendees" type="email" class="w-2/3 p-2 border rounded flex-grow"
                     placeholder="Ajouter un participant" />
                 <button @click.prevent="addAttendee"
                     class="px-4 py-2 bg-green-500 text-white rounded shadow">Ajouter</button>
@@ -247,12 +249,20 @@ const closeEventDetailsPopup = () => {
             <p v-if="errorMessage" class="text-red-500 text-sm mt-4">{{ errorMessage }}</p>
 
             <div class="mt-6 flex justify-end space-x-2">
-                <button @click.prevent="closeEventDetailsPopup"
-                    class="px-4 py-2 bg-gray-300 rounded shadow">Annuler</button>
-                <button type="submit"
-                    class="px-4 py-2 bg-blue-500 text-white rounded shadow">{{ isEditMode ? 'Modifier' : 'Créer' }}</button>
+                <button @click.prevent="closeEventDetailsPopup" class="px-4 py-2 bg-gray-300 rounded shadow">
+                    Annuler
+                </button>
+
+                <button v-if="isEditMode" @click.prevent="deleteEvent"
+                    class="px-4 py-2 bg-red-500 text-white rounded shadow">
+                    Supprimer
+                </button>
+
+                <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded shadow">
+                    {{ isEditMode ? 'Modifier' : 'Créer' }}
+                </button>
             </div>
+
         </form>
     </div>
 </template>
-
