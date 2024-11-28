@@ -7,8 +7,10 @@ import './assets/main.css';
 import 'vue-toast-notification/dist/theme-bootstrap.css';
 import ToastPlugin from 'vue-toast-notification';
 const app = createApp(App);
+import router from './router';
 
 app.use(createPinia());
 app.use(ToastPlugin);
+app.use(router);
 
 app.mount('#app');
