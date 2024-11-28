@@ -23,7 +23,7 @@ jobs:
           scope: '@orion-solutions-group'
 
       - name: Install dependencies
-        run: npm install
+        run: npm install --legacy-peer-deps
 
       - name: Set up GitHub Authentication
         run: echo "{{ secrets.NPM_REGISTRY_AUTH }}" > ~/.npmrc
