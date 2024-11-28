@@ -1,55 +1,93 @@
 <script setup lang="ts">
-
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, defineProps } from 'vue';
 import { Calendar } from '@fullcalendar/core';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 
+// Définition des props à accepter
+const props = defineProps({
+    // Props pour personnaliser le calendrier
+    initialEvents: {
+        type: Array,
+        default: () => [],
+    },
+    locale: {
+        type: String,
+        default: 'fr',
+    },
+    initialView: {
+        type: String,
+        default: 'dayGridMonth',
+    },
+    initialDate: {
+        type: String,
+        default: new Date().toISOString().split('T')[0],
+    },
+    minTime: {
+        type: String,
+        default: '06:00:00',
+    },
+    maxTime: {
+        type: String,
+        default: '21:00:00',
+    },
+    headerToolbar: {
+        type: Object,
+        default: () => ({
+            left: 'prev,next today',
+            center: 'title',
+            right: 'dayGridMonth,timeGridWeek,timeGridDay',
+        }),
+    },
+
+    // Props pour les événements
+    eventTitle: {
+        type: String,
+        default: '',
+    },
+    eventDescription: {
+        type: String,
+        default: '',
+    },
+    eventAttendees: {
+        type: Array,
+        default: () => [],
+    },
+    eventColor: {
+        type: String,
+        default: '#3788d8',
+    },
+});
+
 const calendarRef = ref<HTMLElement | null>(null);
 const calendarInstance = ref<Calendar | null>(null);
 const showCreatePopup = ref(false);
 const showEventDetailsPopup = ref(false);
-const eventTitle = ref('');
+const eventTitle = ref(props.eventTitle);
 const eventStart = ref('');
 const eventEnd = ref('');
 const eventDate = ref('');
-const eventSummary = ref('');
-const eventAttendees = ref<string[]>([]);
-const eventColor = ref('#3788d8');
+const eventSummary = ref(props.eventDescription);
+const eventAttendees = ref(props.eventAttendees);
+const eventColor = ref(props.eventColor);
 const errorMessage = ref('');
 const selectedEvent = ref<any>(null);
 const isEditMode = ref(false);
 const newAttendee = ref('');
 
- /* exemple de réunion
-    {
-        title: 'Réunion 1',
-        start: '2024-11-15T08:00:00Z',
-        end: '2024-11-15T09:00:00Z',
-        color: '#ff5722',
-        extendedProps: {
-            attendees: ['alice@example.com', 'bob@example.com'],
-            summary: 'Réunion de coordination'
-        }
-    }
-    */
-
-
+// Options du calendrier basées sur les props
 const calendarOptions = {
     plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
-    locale: 'fr',
-    initialView: 'dayGridMonth',
-    initialDate: new Date().toISOString().split('T')[0],
-    headerToolbar: {
-        left: 'prev,next today',
-        center: 'title',
-        right: 'dayGridMonth,timeGridWeek,timeGridDay'
-    },
+    locale: props.locale,
+    initialView: props.initialView,
+    initialDate: props.initialDate,
+    headerToolbar: props.headerToolbar,
     firstDay: 1,
-    slotMinTime: '06:00:00',
-    slotMaxTime: '21:00:00', 
+    slotMinTime: props.minTime,
+    slotMaxTime: props.maxTime,
     eventDurationEditable: true,
+    events: props.initialEvents, // Utilisation des événements passés en props
     dateClick(info: any) {
         eventDate.value = info.dateStr;
 
@@ -60,10 +98,10 @@ const calendarOptions = {
         eventStart.value = `${defaultHour.toString().padStart(2, '0')}:${defaultMinute.toString().padStart(2, '0')}`;
         eventEnd.value = `${(defaultHour + 1).toString().padStart(2, '0')}:${defaultMinute.toString().padStart(2, '0')}`;
 
-        eventTitle.value = '';
-        eventSummary.value = '';
-        eventAttendees.value = [];
-        eventColor.value = '#3788d8';
+        eventTitle.value = props.eventTitle;
+        eventSummary.value = props.eventDescription;
+        eventAttendees.value = props.eventAttendees;
+        eventColor.value = props.eventColor;
         showCreatePopup.value = true;
         isEditMode.value = false;
         errorMessage.value = '';
@@ -90,7 +128,7 @@ const calendarOptions = {
 
         eventSummary.value = info.event.extendedProps.summary || '';
         eventAttendees.value = info.event.extendedProps.attendees || [];
-        eventColor.value = info.event.backgroundColor || '#3788d8';
+        eventColor.value = info.event.backgroundColor || props.eventColor;
 
         eventDate.value = startDate?.toISOString().split('T')[0] || '';
 
@@ -206,21 +244,25 @@ const closeEventDetailsPopup = () => {
                 </div>
             </div>
 
-            <label for="eventDate" class="block text-sm font-medium text-gray-700 mt-4">Date de la réunion</label>
-            <input v-model="eventDate" id="eventDate" type="date" class="mt-2 p-2 border rounded w-full" />
-
-            <label for="eventColor" class="block text-sm font-medium text-gray-700 mt-4">Couleur</label>
-            <div class="flex items-center mt-2">
-                <input v-model="eventColor" id="eventColor" type="color" class="p-2 border rounded w-full" />
-                <div class="ml-4 w-8 h-8 rounded border shadow" :style="{ backgroundColor: eventColor }"
-                    title="Aperçu de la couleur sélectionnée"></div>
+            <div class="flex">
+                <div class="block">
+                    <label for="eventDate" class="block text-sm font-medium text-gray-700 mt-4">Date de la
+                        réunion</label>
+                    <input v-model="eventDate" id="eventDate" type="date" class="mt-2 p-2 border rounded w-full" />
+                </div>
+                <div class="block w-full">
+                    <label for="eventColor" class="block text-sm font-medium text-gray-700 mt-4 ml-5">Couleur</label>
+                    <input v-model="eventColor" id="eventColor" type="color" class="ml-5 mt-2 p-5 w-4/5"
+                        :style="{ backgroundColor: eventColor }" />
+                </div>
             </div>
 
-
+            <!-- Champ pour Résumé -->
             <label for="eventSummary" class="block text-sm font-medium text-gray-700 mt-4">Résumé</label>
             <textarea v-model="eventSummary" id="eventSummary" class="mt-2 p-2 border rounded w-full"
                 placeholder="Résumé"></textarea>
 
+            <!-- Section Participants -->
             <label for="eventAttendees" class="block text-sm font-medium text-gray-700 mt-4">Participants</label>
             <div class="flex items-center space-x-2 mt-2">
                 <input v-model="newAttendee" id="eventAttendees" type="email" class="w-2/3 p-2 border rounded flex-grow"
@@ -258,3 +300,51 @@ const closeEventDetailsPopup = () => {
         </form>
     </div>
 </template>
+
+<!--
+<template>
+    <div class="page-calendrier">
+        <h1 class="text-2xl font-bold mb-4">Mon Calendrier</h1>
+        
+        <orion-calendar
+            :events="events"
+            :locale="'fr'"
+            :initialView="'dayGridMonth'"
+            :headerToolbar="{
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,timeGridWeek,timeGridDay'
+            }"
+            :minTime="'08:00:00'"
+            :maxTime="'18:00:00'"
+        />
+    </div>
+  </template>
+  
+  <script setup lang="ts">
+  import OrionCalendar from '@/components/OrionCalendar.vue';
+  
+  const events = [
+    {
+        title: 'Réunion de projet',
+        start: '2024-11-29T09:00:00',
+        end: '2024-11-29T10:00:00',
+        color: '#ff6347',
+        extendedProps: {
+            summary: 'Réunion pour discuter du projet X',
+            attendees: ['alice@example.com', 'bob@example.com'],
+        },
+    },
+    {
+        title: 'Formation interne',
+        start: '2024-11-30T14:00:00',
+        end: '2024-11-30T16:00:00',
+        color: '#3b82f6',
+        extendedProps: {
+            summary: 'Formation pour l\'équipe sur la nouvelle API',
+            attendees: ['carol@example.com', 'dave@example.com'],
+        },
+    },
+  ];
+  </script> 
+-->
