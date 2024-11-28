@@ -22,7 +22,7 @@ const selectedEvent = ref<any>(null);
 const isEditMode = ref(false);
 const newAttendee = ref('');
 
-const initialEvents = [
+ /* exemple de réunion
     {
         title: 'Réunion 1',
         start: '2024-11-15T08:00:00Z',
@@ -32,31 +32,23 @@ const initialEvents = [
             attendees: ['alice@example.com', 'bob@example.com'],
             summary: 'Réunion de coordination'
         }
-    },
-    {
-        title: 'Rendez-vous 2',
-        start: '2024-11-16T14:00:00Z',
-        end: '2024-11-16T15:00:00Z',
-        color: '#4caf50',
-        extendedProps: {
-            attendees: ['carol@example.com', 'dave@example.com'],
-            summary: 'Discussion projet X'
-        }
     }
-];
+    */
+
 
 const calendarOptions = {
     plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
     locale: 'fr',
     initialView: 'dayGridMonth',
     initialDate: new Date().toISOString().split('T')[0],
-    events: initialEvents,
     headerToolbar: {
         left: 'prev,next today',
         center: 'title',
         right: 'dayGridMonth,timeGridWeek,timeGridDay'
     },
     firstDay: 1,
+    slotMinTime: '06:00:00',
+    slotMaxTime: '21:00:00', 
     eventDurationEditable: true,
     dateClick(info: any) {
         eventDate.value = info.dateStr;
