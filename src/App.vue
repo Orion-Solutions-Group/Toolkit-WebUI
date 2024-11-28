@@ -1,5 +1,7 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import OrionCalendar from './components/OrionCalendar.vue';
+</script>
 
 <template>
-  <router-view></router-view>
+  <OrionCalendar />
 </template>
