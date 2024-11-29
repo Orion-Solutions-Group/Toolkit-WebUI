@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import type { RouteRecordRaw } from 'vue-router';
 
-import Homedoc from '@/components/docs/Homedoc.vue';
+import Homedoc from "@/components/docs/Homedoc.vue";
 import Tests from '@/components/tests.vue';
 
 // Définition des routes
