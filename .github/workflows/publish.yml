@@ -29,7 +29,7 @@ jobs:
         run: npm run build
 
       - name: Set up GitHub Authentication
-        run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
+        run: echo "{{ secrets.NPM_REGISTRY_AUTH }}" > ~/.npmrc
 
       - name: Publish to GitHub Package Registry
         run: npm publish
