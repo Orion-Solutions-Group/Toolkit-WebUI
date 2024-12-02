@@ -23,13 +23,13 @@ jobs:
           scope: '@orion-solutions-group'
 
       - name: Install dependencies
-        run: npm install
+        run: npm install --legacy-peer-deps
+
+      - name: Build the project
+        run: npm run build
 
       - name: Set up GitHub Authentication
         run: echo "{{ secrets.NPM_REGISTRY_AUTH }}" > ~/.npmrc
 
       - name: Publish to GitHub Package Registry
-        run: npm publish --access restricted
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
+        run: npm publish
