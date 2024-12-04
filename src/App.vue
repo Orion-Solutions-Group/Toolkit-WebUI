@@ -1,85 +1,123 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import OrionModal from './components/OrionModal.vue';
-import BadgeComponent from './components/TestBadge.vue';
-const showModal = ref(false);
+import InputTest from '@/components/Input.vue';
 
-const handleAccept = () => {
-  showModal.value = false;
-  console.log('Modal accepted');
-  console.log('showModal', showModal.value);
+const inputWithIcons = ref('');
+const inputWithError = ref('');
+const inputLoading = ref('');
+const inputWithSuggestions = ref('');
+const inputEmail = ref('');
+const inputPassword = ref('');
+const inputPlaceholder = ref('');
+const inputDisabled = ref('');
+
+const inputError = ref('');
+const loadingState = ref(false);
+const autoSuggestions = ref(['Suggestion 1', 'Suggestion 2', 'Autre Suggestion']);
+
+const validateInput = () => {
+  if (inputWithError.value.length < 3) {
+    inputError.value = 'La saisie doit contenir au moins 3 caractères.';
+  } else {
+    inputError.value = '';
+  }
+};
+
+const toggleError = () => {
+  inputError.value = inputError.value ? '' : 'Une erreur est survenue.';
+};
+
+const toggleLoading = () => {
+  loadingState.value = !loadingState.value;
 };
 </script>
 
 <template>
-  <h1 class="text-3xl font-bold underline mb-4">Test du composant Badge</h1>
+  <h1 class="text-3xl font-bold underline mb-4">Test du composant CustomInput</h1>
 
-  <!-- Test du label, marges et padding -->
   <div class="my-4">
-    <h2 class="text-xl font-bold">Test avec label, marges et padding</h2>
-    <BadgeComponent
-      label="Badge avec marges"
-      margin="my-4"
-      padding="px-4 py-2"
-    />
-    <BadgeComponent label="Petit Badge" margin="my-2" padding="px-2 py-1" />
-    <BadgeComponent
-      label="Grand Badge"
-      margin="mt-6 mb-4"
-      padding="px-8 py-4"
+    <h2 class="text-xl font-bold">Test de l'icône gauche et droite</h2>
+    <InputTest
+      v-model="inputWithIcons"
+      label="Email avec icônes"
+      type="email"
+      leftIcon="fa fa-envelope"
+      rightIcon="fa fa-check"
+      placeholder="Entrez votre email"
     />
   </div>
 
-  <!-- Test des couleurs du badge -->
   <div class="my-4">
-    <h2 class="text-xl font-bold">Test des couleurs du badge</h2>
-    <BadgeComponent label="Succès" color="bg-green-500" />
-    <BadgeComponent label="Erreur" color="bg-red-500" />
-    <BadgeComponent label="Information" color="bg-blue-500" />
+    <h2 class="text-xl font-bold">Test du message d'erreur</h2>
+    <InputTest
+      v-model="inputWithError"
+      label="Nom d'utilisateur avec erreur"
+      type="text"
+      :error="inputError"
+      placeholder="Entrez un nom d'utilisateur"
+    />
+    <button @click="toggleError" class="btn-primary mt-2">Simuler une erreur</button>
   </div>
 
-  <!-- Test des tailles du badge -->
   <div class="my-4">
-    <h2 class="text-xl font-bold">Test des tailles du badge</h2>
-    <BadgeComponent label="Petit Badge" size="text-xs" />
-    <BadgeComponent label="Moyen Badge" size="text-sm" />
-    <BadgeComponent label="Grand Badge" size="text-lg" />
+    <h2 class="text-xl font-bold">Test de l'état de chargement</h2>
+    <InputTest
+      v-model="inputLoading"
+      label="Chargement de l'input"
+      type="text"
+      :isLoading="loadingState"
+      placeholder="Saisissez quelque chose"
+    />
+    <button @click="toggleLoading" class="btn-primary mt-2">
+      {{ loadingState ? 'Arrêter le chargement' : 'Démarrer le chargement' }}
+    </button>
   </div>
 
-  <!-- Test des variantes du badge -->
   <div class="my-4">
-    <h2 class="text-xl font-bold">Test des variantes du badge</h2>
-    <BadgeComponent label="Badge Plein" variant="full" color="bg-yellow-500" />
-    <BadgeComponent
-      label="Badge Outline"
-      variant="outline"
-      color="bg-purple-500"
+    <h2 class="text-xl font-bold">Test de l'auto-complétion</h2>
+    <InputTest
+      v-model="inputWithSuggestions"
+      label="Nom d'utilisateur avec auto-complétion"
+      type="text"
+      placeholder="Tapez pour voir les suggestions"
+      :autoCompleteResults="['Suggestion 1', 'Suggestion 2', 'Test', 'Utilisateur']"
     />
   </div>
 
-  <!-- Test des icônes gauche et droite -->
   <div class="my-4">
-    <h2 class="text-xl font-bold">Test avec icône à gauche et à droite</h2>
-    <BadgeComponent label="Icône gauche" leftIcon="fa fa-check" />
-    <BadgeComponent label="Icône droite" rightIcon="fa fa-arrow-right" />
+    <h2 class="text-xl font-bold">Test du type d'input</h2>
+    <InputTest
+      v-model="inputEmail"
+      label="Email"
+      type="email"
+      placeholder="Entrez votre email"
+    />
+    <InputTest
+      v-model="inputPassword"
+      label="Mot de passe"
+      type="password"
+      placeholder="Entrez votre mot de passe"
+    />
   </div>
 
-  <!-- Test de l'état de notification (dot) -->
   <div class="my-4">
-    <h2 class="text-xl font-bold">Test de l'état de notification</h2>
-    <BadgeComponent label="Notification" dot color="bg-orange-500" />
+    <h2 class="text-xl font-bold">Test du placeholder</h2>
+    <InputTest
+      v-model="inputPlaceholder"
+      label="Champ avec placeholder"
+      type="text"
+      placeholder="Ceci est un placeholder"
+    />
   </div>
 
-  <!-- Test de l'état cliquable -->
   <div class="my-4">
-    <h2 class="text-xl font-bold">Test de l'état cliquable</h2>
-    <BadgeComponent label="Cliquable" clickable color="bg-pink-500" />
-  </div>
-
-  <!-- Test de la visibilité conditionnelle -->
-  <div class="my-4">
-    <h2 class="text-xl font-bold">Test de la visibilité conditionnelle</h2>
-    <BadgeComponent label="Visible" visible />
-    <BadgeComponent label="Invisible" :visible="false" />
+    <h2 class="text-xl font-bold">Test de l'état désactivé</h2>
+    <InputTest
+      v-model="inputDisabled"
+      label="Champ désactivé"
+      type="text"
+      placeholder="Ce champ est désactivé"
+      :disabled="true"
+    />
   </div>
 </template>
