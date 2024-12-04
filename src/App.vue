@@ -9,7 +9,7 @@ import OrionCalendar from './components/OrionCalendar.vue';
 =======
 import { ref } from 'vue';
 import OrionModal from './components/OrionModal.vue';
-import CustomButton from './components/ButtonTest.vue'; // Assurez-vous que le chemin est correct
+import CustomButton from './components/Button.vue'; // Assurez-vous que le chemin est correct
 
 const showModal = ref(false);
 
