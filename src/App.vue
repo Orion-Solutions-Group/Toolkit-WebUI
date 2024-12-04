@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import OrionModal from './components/OrionModal.vue';
-import TestProgressBar from "@/components/TestProgressBar.vue";
+import TestProgressBar from "@/components/ProgressBar.vue";
 
 const showModal = ref(false);
 
