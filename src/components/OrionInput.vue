@@ -97,10 +97,18 @@ const inputClass = computed(() => {
 
 <template>
   <div :class="['custom-input w-full', margin]">
-    <label v-if="label" class="block mb-1 font-medium text-gray-700">{{ label }}</label>
+    <label v-if="label" class="block mb-1 font-medium text-gray-700">{{
+      label
+    }}</label>
 
     <div class="relative w-full">
-      <i v-if="leftIcon" :class="[leftIcon, 'absolute left-3 top-1/2 transform -translate-y-1/2']"></i>
+      <i
+        v-if="leftIcon"
+        :class="[
+          leftIcon,
+          'absolute left-3 top-1/2 transform -translate-y-1/2',
+        ]"
+      ></i>
 
       <input
         :type="type"
@@ -113,16 +121,44 @@ const inputClass = computed(() => {
         class="w-full"
       />
 
-      <i v-if="rightIcon" :class="[rightIcon, 'absolute right-3 top-1/2 transform -translate-y-1/2']"></i>
+      <i
+        v-if="rightIcon"
+        :class="[
+          rightIcon,
+          'absolute right-3 top-1/2 transform -translate-y-1/2',
+        ]"
+      ></i>
 
-      <div v-if="isLoading" class="absolute right-3 top-1/2 transform -translate-y-1/2">
-        <svg class="animate-spin h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
+      <div
+        v-if="isLoading"
+        class="absolute right-3 top-1/2 transform -translate-y-1/2"
+      >
+        <svg
+          class="animate-spin h-5 w-5 text-gray-500"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+        >
+          <circle
+            class="opacity-25"
+            cx="12"
+            cy="12"
+            r="10"
+            stroke="currentColor"
+            stroke-width="4"
+          ></circle>
+          <path
+            class="opacity-75"
+            fill="currentColor"
+            d="M4 12a8 8 0 018-8v8H4z"
+          ></path>
         </svg>
       </div>
 
-      <ul v-if="displayResults && autoCompleteResults.length" class="absolute w-full bg-white border border-gray-300 rounded-md mt-1 max-h-40 overflow-y-auto z-10">
+      <ul
+        v-if="displayResults && autoCompleteResults.length"
+        class="absolute w-full bg-white border border-gray-300 rounded-md mt-1 max-h-40 overflow-y-auto z-10"
+      >
         <li
           v-for="(result, index) in autoCompleteResults"
           :key="index"
