@@ -68,13 +68,13 @@ const badgeClass = computed(() => {
   return baseClasses.join(' ');
 });
 </script>
- 
+
 <template>
-<div v-if="visible" :class="[badgeClass, margin]">
-<span v-if="dot" class="w-2 h-2 rounded-full bg-red-500 mr-2"></span>
-<i v-if="leftIcon" :class="[leftIcon, 'mr-2']"></i>
-<!-- Directement afficher le label ici -->
-<span>{{ label }}</span>
-<i v-if="rightIcon" :class="[rightIcon, 'ml-2']"></i>
-</div>
+  <div v-if="visible" :class="[badgeClass, margin]">
+    <span v-if="dot" class="w-2 h-2 rounded-full bg-red-500 mr-2"></span>
+    <i v-if="leftIcon" :class="[leftIcon, 'mr-2']"></i>
+    <!-- Directement afficher le label ici -->
+    <span>{{ label }}</span>
+    <i v-if="rightIcon" :class="[rightIcon, 'ml-2']"></i>
+  </div>
 </template>

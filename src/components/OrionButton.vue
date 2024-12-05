@@ -39,9 +39,9 @@ const handleClick = (event: Event) => {
   }
 };
 </script>
- 
+
 <template>
-<button
+  <button
     :disabled="isDisabled"
     @click="handleClick"
     :class="[
@@ -53,31 +53,47 @@ const handleClick = (event: Event) => {
       margin,
       { 'cursor-progress': loading },
     ]"
->
-<!-- Icône à gauche si iconPosition est 'left' -->
-<span v-if="icon && iconPosition === 'left'" class="btn__icon mr-2">
-<i :class="icon"></i>
-</span>
- 
+  >
+    <!-- Icône à gauche si iconPosition est 'left' -->
+    <span v-if="icon && iconPosition === 'left'" class="btn__icon mr-2">
+      <i :class="icon"></i>
+    </span>
+
     <!-- Texte du bouton -->
-<span v-if="!loading">{{ label }}</span>
- 
+    <span v-if="!loading">{{ label }}</span>
+
     <!-- Loader si loading est true -->
-<span v-if="loading" class="btn__loader">
-<!-- Un petit loader Tailwind ou custom -->
-<svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-<path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
-</svg>
-</span>
- 
+    <span v-if="loading" class="btn__loader">
+      <!-- Un petit loader Tailwind ou custom -->
+      <svg
+        class="animate-spin h-5 w-5 text-white"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+      >
+        <circle
+          class="opacity-25"
+          cx="12"
+          cy="12"
+          r="10"
+          stroke="currentColor"
+          stroke-width="4"
+        ></circle>
+        <path
+          class="opacity-75"
+          fill="currentColor"
+          d="M4 12a8 8 0 018-8v8H4z"
+        ></path>
+      </svg>
+    </span>
+
     <!-- Icône à droite si iconPosition est 'right' -->
-<span v-if="icon && iconPosition === 'right'" class="btn__icon ml-2">
-<i :class="icon"></i>
-</span>
-</button>
+    <span v-if="icon && iconPosition === 'right'" class="btn__icon ml-2">
+      <i :class="icon"></i>
+    </span>
+  </button>
 </template>
- 
+
 <style scoped>
 /* Styles personnalisés si nécessaire */
 </style>
