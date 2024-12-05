@@ -11,7 +11,11 @@ const menuLinks = [
   {
     name: 'Applications',
     children: [
-      { name: 'Kairos', path: '/kairos', iconSrc: 'https://cdn-icons-png.flaticon.com/256/1581/1581942.png' },
+      {
+        name: 'Kairos',
+        path: '/kairos',
+        iconSrc: 'https://cdn-icons-png.flaticon.com/256/1581/1581942.png',
+      },
       { name: 'Mercure', path: '/mercure' },
       { name: 'Vulcain', path: '/vulcain' },
     ],
@@ -26,10 +30,10 @@ const userMenuLinks = [
 
 <template>
   <OrionHeader
-      :logoSrc="logoSrc"
-      :menuLinks="menuLinks"
-      :userMenuLinks="userMenuLinks"
-      :isLoggedIn="true"
-      @logout="handleLogout"
+    :logoSrc="logoSrc"
+    :menuLinks="menuLinks"
+    :userMenuLinks="userMenuLinks"
+    :isLoggedIn="true"
+    @logout="handleLogout"
   />
 </template>
