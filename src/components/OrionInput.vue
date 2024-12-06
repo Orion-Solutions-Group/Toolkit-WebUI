@@ -1,7 +1,5 @@
 <script setup lang="ts">
 import { ref, computed, defineProps, defineEmits, watch } from 'vue';
-import { useField, defineRule, ErrorMessage } from 'vee-validate';
-import * as yup from 'yup';
 
 const emit = defineEmits(['update:modelValue']);
 

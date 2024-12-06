@@ -6,10 +6,16 @@
     "type": "git",
     "url": "https://github.com/Orion-Solutions-Group/Toolkit-WebUI.git"
   },
-  "main": "dist/index.js",
-  "module": "dist/index.js",
+  "main": "dist/orion-toolkit.umd.js",
+  "module": "dist/orion-toolkit.es.js",
+  "exports": {
+    ".": {
+      "import": "./dist/orion-toolkit.es.js",
+      "require": "./dist/orion-toolkit.umd.js"
+    }
+  },
   "types": "dist/index.d.ts",
-  "version": "1.1.8",
+  "version": "1.0.1",
   "files": [
     "dist",
     "README.md",
@@ -30,6 +36,7 @@
     "commitlint": "commitlint --edit",
     "test": "echo \"No tests available\""
   },
+
   "dependencies": {
     "@fullcalendar/core": "^6.1.15",
     "@fullcalendar/daygrid": "^6.1.15",
@@ -41,6 +48,7 @@
     "pinia": "^2.1.7",
     "swagger-ui": "^5.18.2",
     "vue": "^3.4.29",
+    "vue-router": "^4.4.5",
     "vue-toast-notification": "^3.1.3"
   },
   "devDependencies": {
@@ -67,12 +75,12 @@
     "typescript": "~5.4.0",
     "vite": "^5.4.6",
     "vitest": "^1.6.0",
-    "vue-router": "^4.5.0",
     "vue-tsc": "^2.0.21",
     "yaml-loader": "^0.8.1"
   },
   "peerDependencies": {
-    "vue": "^3.4.29"
+    "vue": "^3.4.29",
+    "vee-validate": "^4.0.0"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/"

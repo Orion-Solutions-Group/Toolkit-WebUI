@@ -9,8 +9,8 @@ import ToastPlugin from 'vue-toast-notification';
 const app = createApp(App);
 import router from './router';
 
+app.use(router);
 app.use(createPinia());
 app.use(ToastPlugin);
-app.use(router);
 
 app.mount('#app');

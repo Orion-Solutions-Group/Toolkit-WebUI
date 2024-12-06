@@ -51,7 +51,7 @@ const handleLogout = () => {
 </script>
 
 <template>
-  <header class="bg-white shadow-md text-black">
+  <header class="bg-white shadow-md text-black w-full">
     <nav class="flex items-center">
       <div class="flex items-center">
         <slot name="logo">
