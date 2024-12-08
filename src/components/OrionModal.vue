@@ -4,12 +4,16 @@
     class="min-w-screen h-screen animated fadeIn faster fixed left-0 top-0 flex justify-center items-center inset-0 z-50"
     id="modal-id"
   >
-    <div class="absolute bg-black opacity-50 inset-0 z-0"></div>
+    <div
+      class="absolute bg-black opacity-50 inset-0 z-0"
+      @click="closeModal"
+    ></div>
     <div
       :class="modalSizeClass"
       class="p-5 relative mx-auto my-auto rounded-xl shadow-lg bg-white"
     >
       <div>
+        <!-- Header -->
         <div class="text-center p-5 flex-auto justify-center">
           <component
             :is="iconComponent"
@@ -17,8 +21,19 @@
             :class="iconColorClass"
           />
           <h2 class="text-xl font-bold py-4">{{ title }}</h2>
-          <p class="text-sm text-gray-500 px-8">{{ message }}</p>
         </div>
+
+        <!-- Body Slot -->
+        <div class="px-8 py-4">
+          <slot>
+            <p class="text-sm text-gray-500">
+              This is the default content for the modal. You can replace it by
+              providing your own content in a slot.
+            </p>
+          </slot>
+        </div>
+
+        <!-- Footer -->
         <div class="p-3 mt-2 text-center space-x-4 md:block">
           <button
             @click="closeModal"
@@ -27,6 +42,7 @@
             {{ cancelText }}
           </button>
           <button
+            v-if="confirmText"
             @click="confirmAction"
             :class="confirmButtonClass"
             class="mb-2 md:mb-0 px-5 py-2 text-sm shadow-sm font-medium tracking-wider text-white rounded-full hover:shadow-lg"
@@ -48,11 +64,6 @@ export default defineComponent({
     title: {
       type: String,
       default: 'Modal Title',
-    },
-    message: {
-      type: String,
-      default:
-        'This is the regular modal with supporting text below as additional content.',
     },
     cancelText: {
       type: String,
@@ -107,16 +118,15 @@ export default defineComponent({
       if (props.icon) {
         return props.icon;
       } else {
-        if (props.type === 'primary') {
-          return BeakerIcon;
-        } else if (props.type === 'danger') {
-          return TrashIcon;
-        } else if (props.type === 'secondary') {
-          return TrashIcon;
-        } else if (props.type === 'success') {
-          return HomeIcon;
-        } else {
-          return BeakerIcon;
+        switch (props.type) {
+          case 'primary':
+            return BeakerIcon;
+          case 'danger':
+            return TrashIcon;
+          case 'success':
+            return HomeIcon;
+          default:
+            return BeakerIcon;
         }
       }
     });
@@ -142,8 +152,6 @@ export default defineComponent({
       switch (props.type) {
         case 'primary':
           return 'text-blue-500';
-        case 'secondary':
-          return 'text-gray-500';
         case 'danger':
           return 'text-red-500';
         case 'success':
@@ -164,8 +172,6 @@ export default defineComponent({
       switch (props.type) {
         case 'primary':
           return 'bg-blue-500 border-blue-500 hover:bg-blue-600';
-        case 'secondary':
-          return 'bg-gray-500 border-gray-500 hover:bg-gray-600';
         case 'danger':
           return 'bg-red-500 border-red-500 hover:bg-red-600';
         case 'success':

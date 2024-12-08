@@ -1,3 +1,5 @@
+import type { App } from 'vue';
+
 import OrionBreadcrumb from './components/OrionBreadcrumb.vue';
 import OrionBadge from '@/components/OrionBadge.vue';
 import OrionButton from '@/components/OrionButton.vue';
@@ -11,9 +13,13 @@ import OrionModal from '@/components/OrionModal.vue';
 import OrionProgressBar from '@/components/OrionProgressBar.vue';
 import OrionSidebar from '@/components/OrionSidebar.vue';
 import OrionTable from '@/components/OrionTable.vue';
+import OrionCard from '@/components/OrionCard.vue';
+
+import type { OrionBreadcrumbProps, OrionDrawerProps } from './types/types';
 
 const OrionToolkitPlugin = {
-  install(app: any) {
+  install(app: App) {
+    // Enregistrement des composants
     app.component('OrionBreadcrumb', OrionBreadcrumb);
     app.component('OrionBadge', OrionBadge);
     app.component('OrionButton', OrionButton);
@@ -27,6 +33,7 @@ const OrionToolkitPlugin = {
     app.component('OrionProgressBar', OrionProgressBar);
     app.component('OrionSidebar', OrionSidebar);
     app.component('OrionTable', OrionTable);
+    app.component('OrionCard', OrionCard);
   },
 };
 
@@ -45,4 +52,5 @@ export {
   OrionProgressBar,
   OrionSidebar,
   OrionTable,
+  OrionCard,
 };

@@ -42,6 +42,14 @@ defineProps({
     type: Boolean,
     default: false,
   },
+  sidebarColor: {
+    type: String,
+    default: 'bg-gray-900',
+  },
+  headerColor: {
+    type: String,
+    default: 'bg-white',
+  },
 });
 
 const emit = defineEmits(['logout']);
@@ -53,20 +61,25 @@ const handleLogout = () => {
 <template>
   <div class="flex h-screen">
     <!-- Sidebar -->
-    <aside class="flex-shrink-0 w-64 bg-gray-900 text-white">
-      <OrionSidebar :items="sidebarItems" sidebar-title="Kairos CRM" />
+    <aside class="flex-shrink-0 w-64 text-white">
+      <OrionSidebar
+        :items="sidebarItems"
+        sidebar-title="Kairos CRM"
+        :color="sidebarColor"
+      />
     </aside>
 
     <!-- Main Content -->
     <div class="flex flex-col flex-1">
       <!-- Header -->
-      <header class="w-full bg-white shadow flex items-center h-16">
+      <header class="w-full shadow flex items-center h-16">
         <OrionHeader
           :logoSrc="logoSrc"
           :menuLinks="menuLinks"
           :userMenuLinks="userMenuLinks"
           :isLoggedIn="isLoggedIn"
           @logout="handleLogout"
+          :color="headerColor"
         />
       </header>
       <main class="flex-1 p-6 bg-gray-100 overflow-y-auto">

@@ -22,6 +22,9 @@ defineProps({
     type: String,
     default: 'Sidebar',
   },
+  color: {
+    type: String,
+  },
 });
 const isOpen = ref(false);
 </script>
@@ -58,14 +61,15 @@ const isOpen = ref(false);
         'fixed top-0 left-0 z-40 w-64 h-screen transition-transform',
         isOpen ? 'translate-x-0' : '-translate-x-full',
         'sm:translate-x-0',
+        color,
       ]"
       aria-label="Sidebar"
     >
-      <div class="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
+      <div class="h-full px-3 py-4 overflow-y-auto">
         <h3 class="text-lg font-semibold text-gray-700 dark:text-white mb-4">
           {{ sidebarTitle }}
         </h3>
-        <ul class="space-y-2 font-medium">
+        <ul class="space-y-2">
           <li v-for="item in items" :key="item.name">
             <a
               :href="item.path || '#'"

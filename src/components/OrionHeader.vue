@@ -29,6 +29,9 @@ defineProps({
     type: Boolean,
     default: false,
   },
+  color: {
+    type: String,
+  },
 });
 
 const isMenuOpen = ref(false);
@@ -51,7 +54,7 @@ const handleLogout = () => {
 </script>
 
 <template>
-  <header class="bg-white shadow-md text-black w-full">
+  <header :class="[color, 'shadow-md text-black w-full']">
     <nav class="flex items-center">
       <div class="flex items-center">
         <slot name="logo">

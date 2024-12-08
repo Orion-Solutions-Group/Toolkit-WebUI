@@ -64,7 +64,6 @@ const props = defineProps({
 const calendarRef = ref<HTMLElement | null>(null);
 const calendarInstance = ref<Calendar | null>(null);
 const showCreatePopup = ref(false);
-const showEventDetailsPopup = ref(false);
 const eventTitle = ref(props.eventTitle);
 const eventStart = ref('');
 const eventEnd = ref('');
