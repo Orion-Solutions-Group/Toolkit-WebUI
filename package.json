@@ -15,7 +15,7 @@
     }
   },
   "types": "dist/index.d.ts",
-  "version": "1.0.1",
+  "version": "1.0.5",
   "files": [
     "dist",
     "README.md",
@@ -36,7 +36,6 @@
     "commitlint": "commitlint --edit",
     "test": "echo \"No tests available\""
   },
-
   "dependencies": {
     "@fullcalendar/core": "^6.1.15",
     "@fullcalendar/daygrid": "^6.1.15",
@@ -79,8 +78,8 @@
     "yaml-loader": "^0.8.1"
   },
   "peerDependencies": {
-    "vue": "^3.4.29",
-    "vee-validate": "^4.0.0"
+    "vee-validate": "^4.0.0",
+    "vue": "^3.4.29"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/"

@@ -5,7 +5,6 @@
 <script>
 import SwaggerUI from 'swagger-ui';
 import 'swagger-ui/dist/swagger-ui.css';
-import swaggerSpec from '../../assets/swagger.yml';
 
 export default {
   name: 'SwaggerUI',

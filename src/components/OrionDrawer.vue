@@ -45,7 +45,7 @@ export default {
     },
   },
   watch: {
-    isOpen(newVal) {
+    isOpen() {
       this.animationActive = true;
     },
   },

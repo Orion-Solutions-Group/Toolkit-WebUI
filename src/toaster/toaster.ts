@@ -1,7 +1,7 @@
-import { useToast } from 'vue-toast-notification';
+import useToast from 'vue-toast-notification';
 
-export default class ToasterService {
-  toast = useToast();
+export class ToasterService {
+  private toast = useToast();
 
   success(message: string, options = {}) {
     this.toast.success(message, {
