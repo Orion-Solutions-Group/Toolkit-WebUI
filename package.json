@@ -25,7 +25,7 @@
     "dev": "vite",
     "build-only": "vite build",
     "build:css": "npx tailwindcss -i ./src/styles/tailwind.css -o ./dist/tailwind.css",
-    "build:complete": "npm run build-only && npm run build:css",
+    "buildComplete": "npm run build-only && npm run build:css",
     "prepublishOnly": "npm run build-only && npm run build:css",
     "preview": "vite preview",
     "test:unit": "vitest",
