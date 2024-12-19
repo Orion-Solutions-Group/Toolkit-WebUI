@@ -26,7 +26,7 @@ jobs:
         run: npm install --legacy-peer-deps
 
       - name: Build the project
-        run: npm run build
+        run: npm run build:complete
 
       - name: Set up GitHub Authentication
         run: echo "{{ secrets.TOOLKIT_REGISTRY_AUTH  }}" > ~/.npmrc
