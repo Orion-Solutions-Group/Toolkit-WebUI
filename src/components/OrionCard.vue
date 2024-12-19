@@ -14,7 +14,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="bg-white w-full flex justify-center items-center">
+  <div class="w-full flex justify-center items-center">
     <div class="w-full max-w-md rounded-3xl overflow-hidden bg-transparent">
       <div class="bg-transparent h-16 relative">
         <div
