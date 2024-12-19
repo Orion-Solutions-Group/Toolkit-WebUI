@@ -78,7 +78,7 @@
     "yaml-loader": "^0.8.1"
   },
   "peerDependencies": {
-    "vee-validate": "^4.0.0",
+    "vee-validate": "^4.14.7",
     "vue": "^3.4.29"
   },
   "publishConfig": {
